@@ -1,12 +1,12 @@
 import React from 'react'
 
 const Card = ({movie}) => {
-  const poster = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  const poster = movie.poster_path? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "No-Poster.png";
   return (
     <div className='movie-card'>
       <img src={poster} alt={movie.original_title} />
       <div className='mt-4'>
-        <h3>{movie.original_title}</h3>
+        <h3>{movie.title}</h3>
         <div className='content'>
 
           <div className='rating'>

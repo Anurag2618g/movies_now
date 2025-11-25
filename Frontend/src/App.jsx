@@ -12,10 +12,12 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
 
+  const apiURL = "https://api.themoviedb.org/3/";
+
   const fetchMovies = async() => {
     setLoading(true);
     try {
-      const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+      const response = await axios.get((searchText.trim() !== '')? `${apiURL}search/movie?language=en-US&query=${searchText}` : `${apiURL}discover/movie?page=1&language=en-US`, {
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${token}` 
@@ -39,8 +41,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    fetchMovies();
-  }, []);
+      fetchMovies();
+  }, [searchText]);
 
 
   return (
@@ -59,12 +61,14 @@ const App = () => {
         {error ? <p className='text-red-500'>{error}</p>:
             loading ? <p>Loading...</p> : <p className='text-medium font-bold text-2xl'>All Movies</p>
         }
-        {!loading && !error && 
+        {loading? (
+          <p className='text-white'>Loading...</p>
+        ) : error? (
+          <p className='text-red-500'>{error}</p>
+        ) : 
           <ul>
             {movies.map((movie) => (
-              // console.log(movie)
               <Card key={movie.id} movie={movie} />
-              // <p className='text-white'>{movie.original_title}</p>
             ))}
           </ul>
         }
