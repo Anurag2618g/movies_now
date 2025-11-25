@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import './App.css';
 import Search from './components/Search';
+import Card from './components/Card';
+
+const token = import.meta.env.VITE_API_TOKEN;
 
 const App = () => {
   const [searchText, setSearchText] = useState('');
@@ -12,17 +15,18 @@ const App = () => {
   const fetchMovies = async() => {
     setLoading(true);
     try {
-      const response = await axios({
-        method: 'get',
-        url: 'https://jsonfakery.com/movies/random/3',
-        responseType: 'application/json'
+      const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${token}` 
+        }
       })
-      console.log(response);
-      if (response.status !== 200) {
-        setError('Something went wrong!');
+
+      if (response.status == 200) {
+        setMovies(response.data.results);
       } 
       else {
-        setMovies(response.data || []);
+        setError('Something went wrong!');
       }
 
     } catch (error){
@@ -57,8 +61,10 @@ const App = () => {
         }
         {!loading && !error && 
           <ul>
-            {movies.map((movie, index) => (
-              <li key={index}>{movie.original_title}</li>
+            {movies.map((movie) => (
+              // console.log(movie)
+              <Card key={movie.id} movie={movie} />
+              // <p className='text-white'>{movie.original_title}</p>
             ))}
           </ul>
         }
