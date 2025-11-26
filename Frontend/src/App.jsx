@@ -1,23 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
+import { useDebounce } from 'react-use';
 import axios from 'axios';
 import './App.css';
 import Search from './components/Search';
 import Card from './components/Card';
 
 const token = import.meta.env.VITE_API_TOKEN;
+const apiURL = "https://api.themoviedb.org/3/";
 
 const App = () => {
   const [searchText, setSearchText] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
+  const [debouncedTerm, setDebounced] = useState('');
 
-  const apiURL = "https://api.themoviedb.org/3/";
+  useDebounce(() => setDebounced(searchText), 1000, [searchText]);
 
   const fetchMovies = async() => {
     setLoading(true);
     try {
-      const response = await axios.get((searchText.trim() !== '')? `${apiURL}search/movie?language=en-US&query=${searchText}` : `${apiURL}discover/movie?page=1&language=en-US`, {
+      const query = debouncedTerm.trim();
+      const response = await axios.get((query !== '')? `${apiURL}search/movie?language=en-US&query=${encodeURIComponent(query)}` : `${apiURL}discover/movie?page=1&language=en-US`, {
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${token}` 
@@ -42,7 +47,7 @@ const App = () => {
 
   useEffect(() => {
       fetchMovies();
-  }, [searchText]);
+  }, [debouncedTerm]);
 
 
   return (
