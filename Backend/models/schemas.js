@@ -9,10 +9,14 @@ const movie = new mongoose.Schema({
         type: String,
         required: true
     },
-    index: {
-        type: Int,
+    title: {
+        type: String,
         required: true
-    }
+    },
+    count: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const Movie = mongoose.model('movies', movie);
