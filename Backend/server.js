@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import routes from './routes/route';
+import router from './routes/route.js';
 
 dotenv.config();
 const app = express();
@@ -15,7 +15,7 @@ const Port = 3000;
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Database connected successfully');
 
-        app.use('/movie', routes);
+        app.use('/movie', router);
         
         app.listen(process.env.PORT || Port, () => {
             console.log(`Server running at port: ${Port}`);

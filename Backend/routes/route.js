@@ -1,5 +1,5 @@
 import express from 'express';
-import Movie from '../models/schemas';
+import Movie from '../models/schemas.js';
 
 const router = express.Router();
 
@@ -8,3 +8,5 @@ router.get('/trend', async(req, res) => {
 
     res.json(data);
 });
+
+export default router;
