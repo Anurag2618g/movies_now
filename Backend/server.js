@@ -15,7 +15,7 @@ const Port = 3000;
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Database connected successfully');
 
-        app.use('/movie', router);
+        app.use('/api', router);
         
         app.listen(process.env.PORT || Port, () => {
             console.log(`Server running at port: ${Port}`);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const movie = new mongoose.Schema({
-    id: {
+    movie_id: {
         type: String,
         required: true
     },
@@ -18,6 +18,8 @@ const movie = new mongoose.Schema({
         default: 0,
     },
 });
+
+movie.index({count: -1});
 
 const Movie = mongoose.model('movies', movie);
 
