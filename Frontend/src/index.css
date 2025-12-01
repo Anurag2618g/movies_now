@@ -32,7 +32,7 @@
   }
 
   h2 {
-    @apply text-2xl font-bold text-white sm:text-3xl;
+    @apply text-2xl font-bold text-white sm:text-3xl px-10;
   }
 
   main {
@@ -94,10 +94,10 @@
   }
 
   .all-movies {
-    @apply space-y-9;
+    @apply space-y-2;
 
     & ul {
-      @apply grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+      @apply grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4 lg:grid-cols-5;
     }
   }
 

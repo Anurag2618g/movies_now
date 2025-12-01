@@ -8,6 +8,7 @@ import Card from './components/Card';
 
 const token = import.meta.env.VITE_API_TOKEN;
 const apiURL = "https://api.themoviedb.org/3/";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const App = () => {
   const [searchText, setSearchText] = useState('');
@@ -15,6 +16,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
   const [debouncedTerm, setDebounced] = useState('');
+  const [trending, setTrending] = useState([]);
 
   useDebounce(() => setDebounced(searchText), 1000, [searchText]);
 
@@ -45,10 +47,35 @@ const App = () => {
     }
   }
 
+  const updatetrending = async({movie_id, title, poster_path}) => {
+    try {
+      await axios.post(`${baseURL}/api/trending`, {movie_id, title, poster_path});
+    }
+    catch(err) {
+      console.error(err);
+    }
+    finally {
+      alert('Available soon...');
+    }
+  }
+
+  const getTrending = async() => {
+    try {
+      const data = await axios.get(`${baseURL}/api/movies?limit=6`);
+      setTrending(data);
+    }
+    catch(err) {
+      console.error(err);
+    }
+  }
+
   useEffect(() => {
       fetchMovies();
   }, [debouncedTerm]);
-
+  
+  useEffect(() => {
+    getTrending();
+  }, []);
 
   return (
     <main>
@@ -62,7 +89,22 @@ const App = () => {
         <Search searchText = {searchText} setSearchText = {setSearchText} />
       </div>
 
+      {trending.length > 0 && (
+        <section className='trending'>
+          <h2>Trending Movies</h2>
+          <ul>
+            {trending.map((movie, index) => (
+              <li key={movie.movie_id}>
+                <p>{index+1}</p>
+                <img src={movie.poster_path} alt={movie.title} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className='all-movies'>
+        <h2>All Movies</h2>
         {error ? <p className='text-red-500'>{error}</p>:
             loading ? <p>Loading...</p> : <p className='text-medium font-bold text-2xl'>All Movies</p>
         }
@@ -73,7 +115,7 @@ const App = () => {
         ) : 
           <ul>
             {movies.map((movie) => (
-              <Card key={movie.id} movie={movie} />
+              <Card key={movie.id} movie={movie} onClick={() => updatetrending} />
             ))}
           </ul>
         }
