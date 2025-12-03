@@ -7,7 +7,7 @@ import router from './routes/route.js';
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors);
+app.use(cors());
 const Port = 3000;
 
 (async() => {
@@ -18,7 +18,7 @@ const Port = 3000;
         app.use('/api', router);
         
         app.listen(process.env.PORT || Port, () => {
-            console.log(`Server running at port: ${Port}`);
+            console.log(`Server running at port: ${process.env.PORT || Port}`);
         });
     } catch(err) {
         console.error(JSON.stringify({

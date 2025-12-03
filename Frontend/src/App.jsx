@@ -30,14 +30,13 @@ const App = () => {
           Authorization: `Bearer ${token}` 
         }
       })
-
       if (response.status == 200) {
         setMovies(response.data.results);
+        setError('');
       } 
       else {
         setError('Something went wrong!');
       }
-
     } catch (error){
       console.error(error);
       setError(error.message);
@@ -47,22 +46,22 @@ const App = () => {
     }
   }
 
-  const updatetrending = async({movie_id, title, poster_path}) => {
+  const updatetrending = async({id, poster_path, title}) => {
     try {
-      await axios.post(`${baseURL}/api/trending`, {movie_id, title, poster_path});
+      const res = await axios.post(`${baseURL}/api/trending`, {id, title, poster_path});
+      console.log(res);
+      console.log(title)
+      alert('Available soon');
     }
     catch(err) {
-      console.error(err);
-    }
-    finally {
-      alert('Available soon...');
+      console.error(err.response?.data || err.message);
     }
   }
 
   const getTrending = async() => {
     try {
-      const data = await axios.get(`${baseURL}/api/movies?limit=6`);
-      setTrending(data);
+      const res = await axios.get(`${baseURL}/api/movies?limit=6`);
+      setTrending(res.data);
     }
     catch(err) {
       console.error(err);
@@ -94,9 +93,9 @@ const App = () => {
           <h2>Trending Movies</h2>
           <ul>
             {trending.map((movie, index) => (
-              <li key={movie.movie_id}>
+              <li key={movie.id}>
                 <p>{index+1}</p>
-                <img src={movie.poster_path} alt={movie.title} />
+                <img className='hover:scale-105' src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
               </li>
             ))}
           </ul>
@@ -105,9 +104,6 @@ const App = () => {
 
       <section className='all-movies'>
         <h2>All Movies</h2>
-        {error ? <p className='text-red-500'>{error}</p>:
-            loading ? <p>Loading...</p> : <p className='text-medium font-bold text-2xl'>All Movies</p>
-        }
         {loading? (
           <p className='text-white'>Loading...</p>
         ) : error? (
@@ -115,7 +111,7 @@ const App = () => {
         ) : 
           <ul>
             {movies.map((movie) => (
-              <Card key={movie.id} movie={movie} onClick={() => updatetrending} />
+              <Card key={movie.id} movie={movie} onClick={() => updatetrending(movie)} />
             ))}
           </ul>
         }

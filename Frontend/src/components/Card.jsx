@@ -3,7 +3,7 @@ import React from 'react'
 const Card = ({movie, onClick}) => {
   const poster = movie.poster_path? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "No-Poster.png";
   return (
-    <div className='movie-card cursor-pointer transition-transform duration-300 hover:scale-102' onClick={onClick(movie)}>
+    <div className='movie-card cursor-pointer transition-transform duration-300 hover:scale-102' onClick={onClick}>
       <img src={poster} alt={movie.original_title} />
       <div className='mt-4'>
         <h3>{movie.title}</h3>

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 const movie = new mongoose.Schema({
-    movie_id: {
+    id: {
         type: String,
         required: true
     },
-    posterPath: {
+    poster_path: {
         type: String,
         required: true
     },
