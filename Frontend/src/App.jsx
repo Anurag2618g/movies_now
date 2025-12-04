@@ -33,9 +33,6 @@ const App = () => {
       if (response.status == 200) {
         setMovies(response.data.results);
         setError('');
-      } 
-      else {
-        setError('Something went wrong!');
       }
     } catch (error){
       console.error(error);
@@ -88,7 +85,7 @@ const App = () => {
         <Search searchText = {searchText} setSearchText = {setSearchText} />
       </div>
 
-      {trending.length > 0 && (
+      {debouncedTerm == '' && trending.length > 0 && (
         <section className='trending'>
           <h2>Trending Movies</h2>
           <ul>
@@ -103,17 +100,23 @@ const App = () => {
       )}
 
       <section className='all-movies'>
-        <h2>All Movies</h2>
         {loading? (
           <p className='text-white'>Loading...</p>
         ) : error? (
           <p className='text-red-500'>{error}</p>
-        ) : 
-          <ul>
-            {movies.map((movie) => (
-              <Card key={movie.id} movie={movie} onClick={() => updatetrending(movie)} />
-            ))}
-          </ul>
+        ) : movies.length !== 0?  
+          (
+          <>
+            <h2>All Movies</h2>
+            <ul>
+              {movies.length !== 0 && movies.map((movie) => (
+                <Card key={movie.id} movie={movie} onClick={() => updatetrending(movie)} />
+              ))}
+            </ul>
+          </>
+          ) : (
+            <p className='text-gradient text-center py-20 m-20  font-medium text-4xl'>Found Nothing Here!</p>
+          )
         }
       </section>
     </main>
